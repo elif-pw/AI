@@ -3,6 +3,9 @@ import numpy as np
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
+import warnings
+
+warnings.simplefilter("ignore")  # warning suppression
 
 h5Data = "output/data.h5"
 h5Labels = "output/labels.h5"
@@ -30,11 +33,13 @@ modelRFC = RandomForestClassifier(n_estimators=treeNumber, random_state=seed)
     np.array(globalFeatures), np.array(globalLabels), test_size=testSize, random_state=seed)
 
 kfold = KFold(n_splits=10, random_state=seed)
-cvScoreRFC = cross_val_score(modelRFC, trainDataGlobal, trainLabelsGlobal, cv=kfold, scoring=scoring)
+cvScoreRFC = cross_val_score(
+    modelRFC, trainDataGlobal, trainLabelsGlobal, cv=kfold, scoring=scoring)
 print("Rand Forest Classifier score: {}".format(cvScoreRFC))
 
 modelSVC = SVC(random_state=seed)
 
 kfold = KFold(n_splits=10, random_state=seed)
-cvScoreSVC = cross_val_score(modelSVC, trainDataGlobal, trainLabelsGlobal, cv=kfold, scoring=scoring)
+cvScoreSVC = cross_val_score(
+    modelSVC, trainDataGlobal, trainLabelsGlobal, cv=kfold, scoring=scoring)
 print("SVC score: {}".format(cvScoreSVC))
