@@ -1,13 +1,14 @@
 import h5py
 import numpy as np
 from sklearn.model_selection import train_test_split, KFold, cross_validate
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier,  AdaBoostClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+
 import warnings
 
 warnings.simplefilter("ignore")  # warning suppression
@@ -43,6 +44,8 @@ models.append(("LR", LogisticRegression(random_state=seed)))
 models.append(("LDA", LinearDiscriminantAnalysis()))
 models.append(("NB", GaussianNB()))
 models.append(("CART", DecisionTreeClassifier(random_state=seed)))
+models.append(("ABC", AdaBoostClassifier()))
+models.append(("QDA", QuadraticDiscriminantAnalysis()))
 
 (trainDataGlobal, testDataGlobal, trainLabelsGlobal, testLabelsGlobal) = train_test_split(
     globalFeatures, globalLabels, test_size=testSize, random_state=seed)
