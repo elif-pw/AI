@@ -33,7 +33,7 @@ nSplits = 10
 treeNumber = 100
 testSize = 0.1
 seed = 9
-scoring = {"acc": "accuracy", "prec_macro": "precision_macro"}
+scoring = {"acc": "accuracy", "prec": "precision"}
 
 models = []
 models.append(("RFC", RandomForestClassifier(
@@ -50,26 +50,15 @@ models.append(("QDA", QuadraticDiscriminantAnalysis()))
 (trainDataGlobal, testDataGlobal, trainLabelsGlobal, testLabelsGlobal) = train_test_split(
     globalFeatures, globalLabels, test_size=testSize, random_state=seed)
 
-results = []
+# results = []
 for name, model in models:
     kfold = KFold(n_splits=nSplits, random_state=seed)
     cvResult = cross_validate(model, trainDataGlobal, trainLabelsGlobal,
                               cv=kfold, scoring=scoring, return_train_score=True)
-    results.append((name, cvResult["test_acc"], cvResult["test_prec_macro"]))
-    msg = "{}\tACC: {}\tPREC_MACRO: {}".format(
-        name, cvResult["test_acc"], cvResult["test_prec_macro"])
-    print(msg)
-
-# kfold = KFold(n_splits=10, random_state=seed)
-# cvScoreRFC = cross_validate(
-#     modelRFC, trainDataGlobal, trainLabelsGlobal, cv=kfold, scoring=scoring, return_train_score=True)
-
-# print("RFC score:")
-# print("Acc: {}\nPrec_macro: {}".format(cvScoreRFC["test_acc"], cvScoreRFC["test_prec_macro"]))
-# print("Rand Forest Classifier score: {}".format(cvScoreRFC.keys()))
-
-# modelSVC = SVC(random_state=seed)
-
-# cvScoreSVC = cross_val_score(
-#     modelSVC, trainDataGlobal, trainLabelsGlobal, cv=kfold, scoring=scoring)
-# print("SVC score: {}".format(cvScoreSVC))
+    # results.append((name, cvResult["test_acc"], cvResult["test_prec"]))
+    h5fData.create_dataset(name+"_acc", data=np.array(cvResult["test_acc"]))
+    h5fData.create_dataset(name+"_prec", data=np.array(cvResult["test_prec"]))
+    h5fData.create_dataset(
+        name+"_fit_time", data=np.array(cvResult["fit_time"]))
+    h5fData.create_dataset(
+        name+"_score_time", data=np.array(cvResult["score_time"]))
