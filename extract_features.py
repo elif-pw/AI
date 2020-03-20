@@ -49,8 +49,8 @@ def getGlobalFeatures(file):
 
 
 trainPath = "data/Training"
-h5Data = "output/data.h5"
-h5Labels = "output/labels.h5"
+h5Data = "output/dataNonNormalized.h5"  # output/data.h5 for normalized
+h5Labels = "output/labelsNonNormalized.h5"  # output/data.h5 for normalized
 
 trainLabels = os.listdir(trainPath)
 
@@ -71,11 +71,11 @@ targetNames = np.unique(labels)
 le = LabelEncoder()
 target = le.fit_transform(labels)
 
-scaler = MinMaxScaler(feature_range=(0, 1))
-rescaledFeatures = scaler.fit_transform(globalFeatures)
+#scaler = MinMaxScaler(feature_range=(0, 1))
+#rescaledFeatures = scaler.fit_transform(globalFeatures)
 
 h5fData = h5py.File(h5Data, "w")
-h5fData.create_dataset("globalFeatures", data=np.array(rescaledFeatures))
+h5fData.create_dataset("globalFeatures", data=np.array(globalFeatures))
 h5fData.close()
 
 h5fLabel = h5py.File(h5Labels, "w")
