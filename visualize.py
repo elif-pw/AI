@@ -5,6 +5,7 @@ import warnings
 
 warnings.simplefilter("ignore")
 
+
 # give one metric and specify the dataset (default is not normalized)
 def graph(metric, normal=False):
     metric_results = []
@@ -23,8 +24,8 @@ def graph(metric, normal=False):
         fig.suptitle('Comparison of ' + metric + " for not normalized data")
 
     ax = fig.add_subplot(111)
-    pyplot.boxplot(metric_results)
-    ax.set_xticklabels(names)
+    pyplot.boxplot(metric_results, 0, '', 0)
+    ax.set_yticklabels(names)
     pyplot.show()
 
 
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     graph(metrics[3])
 
     # _fit_time metric for normalized dataset
-    graph(metrics[2], normal=True)
+    graph(metrics[2])
 
     h5fResults.close()
     h5fNonNormalizedResults.close()
